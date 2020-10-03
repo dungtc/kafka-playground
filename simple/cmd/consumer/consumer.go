@@ -24,7 +24,7 @@ var (
 )
 
 func main() {
-	consumerGroup, err := simple.NewConsumerGroup()
+	consumerGroup, err := simple.NewConsumerGroup(*version, *groupId, *brokerList...)
 	if err != nil {
 		panic(err)
 	}
@@ -32,12 +32,14 @@ func main() {
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt)
 
+	consumer := simple.NewConsumer()
+
 	wg := &sync.WaitGroup{}
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
 		for {
-			if err := consumerGroup.Consume(ctx, strings.Split(*topics, ","), &simple.Consumer); err != nil {
+			if err := consumerGroup.Consume(ctx, strings.Split(*topics, ","), &consumer); err != nil {
 				log.Panicf("Error from consumer: %v", err)
 			}
 			// check if context was cancelled, signaling that the consumer should stop

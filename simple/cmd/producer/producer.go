@@ -16,7 +16,7 @@ var (
 )
 
 func main() {
-	producer, err := simple.NewProducer(maxRetry, brokerList)
+	producer, err := simple.NewProducer(*maxRetry, *brokerList...)
 	if err != nil {
 		panic(err)
 	}
