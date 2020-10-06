@@ -10,13 +10,28 @@ import (
 )
 
 var (
-	brokerList = kingpin.Flag("brokerList", "List of brokers").Default("localhost:9092").Strings()
-	topic      = kingpin.Flag("topic", "Topic name").Default("youtube").String()
-	maxRetry   = kingpin.Flag("maxRetry", "Retry limit").Default("5").Int()
+	brokerList                     = kingpin.Flag("brokerList", "List of brokers").Default("localhost:9092").Strings()
+	topic                          = kingpin.Flag("topic", "Topic name").Default("youtube").String()
+	version                        = kingpin.Flag("version", "Kafka version").Default("2.5.0").String()
+	maxRetry                       = kingpin.Flag("maxRetry", "Retry limit").Default("5").Int()
+	defaultPartitions        int32 = 1
+	defaultReplicationFactor int16 = 1
 )
 
 func main() {
-	producer, err := simple.NewProducer(maxRetry, brokerList)
+	kingpin.Parse()
+
+	// init administration
+	clusterAdmin, err := simple.NewClusterAdmin(*version, *brokerList...)
+	if err != nil {
+		panic(err)
+	}
+
+	if err := clusterAdmin.NewTopic(*topic, defaultPartitions, defaultReplicationFactor); err != nil {
+		panic(err)
+	}
+
+	producer, err := simple.NewProducer(*maxRetry, *brokerList...)
 	if err != nil {
 		panic(err)
 	}

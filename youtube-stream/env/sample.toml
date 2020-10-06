@@ -1,0 +1,11 @@
+[database]
+host="localhost" # DATABASE_HOST
+port="5432" # DATABASE_PORT
+user="postgres" # DATABASE_USER
+password="postgres" # DATABASE_PASSWORD
+name="postgres" # DATABASE_NAME
+max_open_connection="50" # DATABASE_MAX_OPEN_CONNECTION
+max_idle_connection="50" # DATABASE_MAX_IDLE_CONNECTION
+
+[google_connection]
+api_key=""

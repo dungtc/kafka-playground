@@ -6,14 +6,28 @@ import (
 	"github.com/Shopify/sarama"
 )
 
-func NewConsumerGroup(ver string, groupId string, brokerList ...string) (sarama.ConsumerGroup, error) {
+var BalanceStrategy = map[string]sarama.BalanceStrategy{
+	"sticky":     sarama.BalanceStrategySticky,
+	"roundrobin": sarama.BalanceStrategyRoundRobin,
+	"range":      sarama.BalanceStrategyRange,
+}
+
+func NewConsumerGroup(ver string, groupId string, assignor string, brokerList ...string) (sarama.ConsumerGroup, error) {
 	config := sarama.NewConfig()
 	version, err := sarama.ParseKafkaVersion(ver)
 	if err != nil {
-		log.Panicf("Error parsing Kafka version: %v", err)
+		log.Panicf("Error parsing Kafka version: %v", ver)
 	}
 	config.Version = version
 	config.Consumer.Return.Errors = true
+	config.Consumer.Offsets.Initial = sarama.OffsetOldest
+
+	strategy, ok := BalanceStrategy[assignor]
+	if !ok {
+		log.Panicf("Unrecognized consumer group partition assignor: %s", assignor)
+	}
+	config.Consumer.Group.Rebalance.Strategy = strategy
+
 	client, err := sarama.NewClient(brokerList, config)
 	if err != nil {
 		log.Panic(err)
@@ -34,8 +48,15 @@ type Consumer struct {
 	ready chan bool
 }
 
+func NewConsumer() Consumer {
+	return Consumer{
+		ready: make(chan bool),
+	}
+}
+
 // Setup is run at the beginning of a new session, before ConsumeClaim
 func (consumer *Consumer) Setup(sarama.ConsumerGroupSession) error {
+	log.Println("Consumer listening")
 	// Mark the consumer as ready
 	// close(consumer.ready)
 	return nil
