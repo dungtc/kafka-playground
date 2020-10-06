@@ -14,20 +14,25 @@ import (
 
 var (
 	brokerList        = kingpin.Flag("brokerList", "List of brokers").Default("localhost:9092").Strings()
-	topics            = kingpin.Flag("topic", "Topic name").Default("test").String()
+	topics            = kingpin.Flag("topic", "Topic name").Default("youtube").String()
 	partition         = kingpin.Flag("partition", "Partition").Default("0").String()
 	groupId           = kingpin.Flag("groupId", "Group id").Default("my-application").String()
 	offsetType        = kingpin.Flag("offsetType", "Offset Type (OffsetNewest | OffsetOldest)").Default("-1").Int()
 	messageCountStart = kingpin.Flag("messageCountStart", "Message counter start from:").Int()
 	maxRetry          = kingpin.Flag("maxRetry", "Retry limit").Default("5").Int()
 	version           = kingpin.Flag("version", "Kafka version").Default("2.5.0").String()
+	assignor          = kingpin.Flag("assignor", "Kafka partition assignor").Default("sticky").String()
 )
 
 func main() {
-	consumerGroup, err := simple.NewConsumerGroup(*version, *groupId, *brokerList...)
+	kingpin.Parse()
+
+	log.Println("Init consumer group")
+	consumerGroup, err := simple.NewConsumerGroup(*version, *groupId, *assignor, *brokerList...)
 	if err != nil {
 		panic(err)
 	}
+
 	ctx, cancel := context.WithCancel(context.Background())
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt)
