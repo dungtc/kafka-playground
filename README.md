@@ -3,7 +3,7 @@ A publisher or multiple publisher write messages to many partitions and single o
 
 **Consumer group** is a group of consumers, it can parallelise the data consumption.
 
-When a new consumer joins to consumer group or remove a consumer, **rebalacing** happen
+When a new consumer joins to consumer group or remove a consumer, **rebalancing** happen
 
 **Consumer group coordinator** implement rebalacing strategy and manage the state of the group. It auto rebalace message to appropriate consumer in each consumer group
 
