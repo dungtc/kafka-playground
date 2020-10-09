@@ -12,6 +12,7 @@ When a new consumer joins to consumer group or remove a consumer, **rebalacing**
 # 2. Youtube streaming
 A simple streaming model to collect videos data and sync data between **POSTGRESQL** and **ELASTICSEARCH**
 
+![alt text](https://github.com/dungtc/kafka-playground/blob/develop/youtube-stream/diagram/youtube.png?raw=true)
 
 **Prepare connector image**
 The kafka connect base image only contain a few connectors. To add new connector, you need to build a new docker image that have new connectors installed.
