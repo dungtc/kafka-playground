@@ -106,3 +106,11 @@ More than that it notify to **Kafka** if any configuration change happen (such a
 
 ![alt text](https://github.com/dungtc/kafka-playground/blob/develop/kafka-cluster/Kafka-cluster.png?raw=true)
 
+**Environment**
+```
+KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker2:39092,PLAINTEXT_HOST://localhost:9093
+```
+
+You should notice to these env variables, it defines internal network and external network publish to client
