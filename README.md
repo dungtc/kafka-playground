@@ -9,6 +9,20 @@ When a new consumer joins to consumer group or remove a consumer, **rebalancing*
 
 ![alt text](https://images.squarespace-cdn.com/content/v1/56894e581c1210fead06f878/1512813188413-EEI12VI1FMQLJ4XMRQTJ/ke17ZwdGBToddI8pDm48kJMyHperWZxre3bsQoFNoPhZw-zPPgdn4jUwVcJE1ZvWEtT5uBSRWt4vQZAgTJucoTqqXjS3CfNDSuuf31e0tVGDclntk9GVn4cF1XFdv7wlNvED_LyEM5kIdmOo2jMRZpu3E9Ef3XsXP1C_826c-iU/KafkaPubSub.png?format=500w)
 
+**Producer cmd**
+
+```
+go run ./cmd/producer/producer.go --topic topic-name --partitions 1 --replicas 1
+```
+
+**You have to config kafka cluster when change number paritions and replicas > 1**
+
+**Consumer cmd**
+
+```
+go run ./cmd/consumer/consumer.go --topic topic-name
+```
+
 # 2. Youtube streaming
 A simple streaming model to collect videos data and sync data between **POSTGRESQL** and **ELASTICSEARCH**
 
@@ -81,3 +95,22 @@ curl -X GET "localhost:9200/_search?pretty&size=100" -H 'Content-Type: applicati
 }
 '
 ```
+# 3. Kafka cluster
+
+When a kafka client connect to one of brokers, it will auto connect to entire kafka cluster brokers. Kafka broker call **bootstrap server**.
+
+**Zookeeper** responsible for managing kafka brokers, it perform partition leader election, and in-sync-replicas.
+More than that it notify to **Kafka** if any configuration change happen (such as topics, paritions...).
+
+***In production environment, you need to config **Zookeeper Cluster** too***
+
+![alt text](https://github.com/dungtc/kafka-playground/blob/develop/kafka-cluster/Kafka-cluster.png?raw=true)
+
+**Environment**
+```
+KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker2:39092,PLAINTEXT_HOST://localhost:9093
+```
+
+You should notice to these env variables, it defines internal network and external network publish to client
