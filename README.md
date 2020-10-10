@@ -17,6 +17,21 @@ go run ./cmd/producer/producer.go --topic topic-name --partitions 1 --replicas 1
 
 **You have to config kafka cluster when change number paritions and replicas > 1**
 
+
+In case, you want to modify topic configuration ***manually*** after setting up kafka cluster, you can use kafka-cli to execute:
+
+Add new topic
+```
+docker-compose exec broker kafka-topics --create --topic youtube --partitions 3 -replication-factor 3 --bootstrap-server broker:9092
+```
+
+Alter exist topic
+```
+docker-compose exec broker kafka-topics --alter --topic youtube --partitions 3 -replication-factor 3 --bootstrap-server broker:9092
+```
+
+Kafka doens't support reducing the number of paritions for a topic 
+
 **Consumer cmd**
 
 ```
