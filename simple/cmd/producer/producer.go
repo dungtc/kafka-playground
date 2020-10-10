@@ -10,12 +10,12 @@ import (
 )
 
 var (
-	brokerList                     = kingpin.Flag("brokerList", "List of brokers").Default("localhost:9092").Strings()
-	topic                          = kingpin.Flag("topic", "Topic name").Default("youtube").String()
-	version                        = kingpin.Flag("version", "Kafka version").Default("2.5.0").String()
-	maxRetry                       = kingpin.Flag("maxRetry", "Retry limit").Default("5").Int()
-	defaultPartitions        int32 = 1
-	defaultReplicationFactor int16 = 1
+	brokerList               = kingpin.Flag("brokerList", "List of brokers").Default("localhost:9092").Strings()
+	topic                    = kingpin.Flag("topic", "Topic name").Default("youtube").String()
+	version                  = kingpin.Flag("version", "Kafka version").Default("2.5.0").String()
+	maxRetry                 = kingpin.Flag("maxRetry", "Retry limit").Default("5").Int()
+	partitions        *int32 = kingpin.Flag("partitions", "Partitions").Default("1").Int32()
+	replicationFactor *int16 = kingpin.Flag("replicas", "Replication factor broker").Default("1").Int16()
 )
 
 func main() {
@@ -27,7 +27,7 @@ func main() {
 		panic(err)
 	}
 
-	if err := clusterAdmin.NewTopic(*topic, defaultPartitions, defaultReplicationFactor); err != nil {
+	if err := clusterAdmin.NewTopic(*topic, *partitions, *replicationFactor); err != nil {
 		panic(err)
 	}
 
