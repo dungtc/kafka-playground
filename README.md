@@ -129,3 +129,25 @@ KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker2:39092,PLAINTEXT_HOST://localhost
 ```
 
 You should notice to these env variables, it defines internal network and external network publish to client
+
+# 4. Schema Registry
+**[Schema registry API usage](https://docs.confluent.io/current/schema-registry/develop/using.html)**
+
+List all subjects
+```
+curl -X GET http://localhost:8081/subjects
+```
+Example result:
+```
+["Kafka-value","Kafka-key"]
+```
+
+Get schema registered version of subject
+```
+curl -X GET http://localhost:8081/subjects/${subject-name}/versions/1
+```
+Delete schema version of subject
+
+```
+curl -X DELETE http://localhost:8081/subjects/${subject-name}/versions/1
+```
