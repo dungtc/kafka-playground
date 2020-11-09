@@ -1,0 +1,17 @@
+{
+  "fields": [
+    {
+      "name": "id",
+      "type": "string"
+    },{
+      "name": "categoryId",
+      "type": "string"
+    },{
+      "name": "etag",
+      "type": "string"
+    }
+  ],
+  "name": "Video",
+  "namespace": "io.confluent.examples.clients.basicavro",
+  "type": "record"
+}
