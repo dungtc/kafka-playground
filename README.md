@@ -151,3 +151,63 @@ Delete schema version of subject
 ```
 curl -X DELETE http://localhost:8081/subjects/${subject-name}/versions/1
 ```
+
+### Avro schema
+
+***Properties*** include 4 fields: type, namespace, name, fields
+``` Example
+{
+     "type": "record",
+     "namespace": "com.example",
+     "name": "FullName",
+     "fields": [
+       { "name": "first", "type": "string" },
+     ]
+} 
+```
+**Primitive Data Types** int, long, float, double, string, null, bytes, boolean
+
+**Complex Data Types** record, enum, array, map, unions, fixed (fixed-sized field)
+
+**"record"** represents an object 
+``` 
+{
+     "type": "record",
+     "namespace": "com.example",
+     "name": "FullName",
+     "fields": [
+       { "name": "first", "type": "string" },
+     ]
+} 
+```
+
+**"enum"** defines enumerated values
+
+```
+{"type": "enum", "symbols": ["A", "B","C"]}
+```
+
+**"array"** defines an array fields with a type
+```
+{"type": "array", "items": "string"}
+```
+
+**"map"** defines key, value pairs. The key must be a string
+```
+{"type": "map", "values": "string"}
+```
+
+**"unions"** define a list of variable types
+```
+{"type": ["int", "string", "null"]}
+```
+
+**Logical Data Types** supported in Avro version 1.7.7
+Provides more meaning with existing primitive types
+- decimal (bytes)
+- date (int)
+- time-milis (long) number of miliseconds after midnight
+- timestamp-milis (long) number of miliseconds from unix epoch
+
+```
+{"type": "int", "logicalType": "decimal"}
