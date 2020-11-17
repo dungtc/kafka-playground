@@ -132,7 +132,7 @@ You should notice to these env variables, it defines internal network and extern
 
 # 4. Schema Registry
 
-Producer sends bytes to kafka cluster, the consumers don't know any data that the producer sends, it has no verification. In a distributed system it becomes very hard for evolving microservices between other teams. That why schema registry was created.
+Producer sends bytes to kafka cluster, the consumers don't know any data that the producer sends, it has no verification and will break the consumer. In a distributed system it becomes very hard for evolving microservices and break consistency between other teams. That why schema registry was created.
 
 ![alt text](https://github.com/dungtc/kafka-playground/blob/develop/schema/kafka-schema-registry.png?raw=true)
 
