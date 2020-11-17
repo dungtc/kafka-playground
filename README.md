@@ -135,9 +135,7 @@ You should notice to these env variables, it defines internal network and extern
 ![alt text](https://github.com/dungtc/kafka-playground/blob/develop/schema/kafka-schema-registry.png?raw=true)
 
 
-Schema registry provides restful interface for storing and retriving schema
-
-Rest proxy provides restful interface to Kafka cluster for producing and consuming message without using native Kafka protocol.
+**Schema registry** provides restful interface for storing and retriving Avro, JSON, Protobuf schema
 
 
 ### [Schema registry API usage](https://docs.confluent.io/current/schema-registry/develop/using.html)
@@ -163,7 +161,7 @@ curl -X DELETE http://localhost:8081/subjects/${subject-name}/versions/1
 
 ### [Avro schema](https://avro.apache.org/docs/current/spec.html)
 
-***Properties*** include 4 fields: type, namespace, name, fields
+Avro schema form includes 4 fields: type, namespace, name, fields
 ``` Example
 {
      "type": "record",
