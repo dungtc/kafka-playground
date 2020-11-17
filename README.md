@@ -132,7 +132,7 @@ You should notice to these env variables, it defines internal network and extern
 
 # 4. Schema Registry
 
-![alt text](https://github.com/dungtc/kafka-playground/blob/develop/youtube-stream/kafka-schema-registry.png?raw=true)
+![alt text](https://github.com/dungtc/kafka-playground/blob/develop/schema/kafka-schema-registry.png?raw=true)
 
 
 Schema registry provides restful interface for storing and retriving schema
