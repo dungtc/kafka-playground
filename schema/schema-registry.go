@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 
 	"github.com/riferrei/srclient"
+	"github.com/sirupsen/logrus"
 )
 
 type SchemaRegistry interface {
@@ -45,9 +46,8 @@ func (s *schemaRegistry) CreateSchema(topic, schema, format string, isKey bool) 
 }
 
 func (s *schemaRegistry) CreateSchemaFromFile(topic, schemaFile, format string, isKey bool) (*Schema, error) {
-	fmt.Println("voo")
 	schemaBytes, err := ioutil.ReadFile(schemaFile)
-	fmt.Printf("schemaBytes %v\n", string(schemaBytes))
+	logrus.Printf("schemaBytes %v\n", string(schemaBytes))
 	if err != nil {
 		panic(fmt.Sprintf("Error read schema file %s", err))
 	}
@@ -88,6 +88,5 @@ func (s *Schema) SerializeData(payload []byte) []byte {
 func (s *Schema) DeserializeData(msg []byte) []byte {
 	native, _, _ := s.Codec().NativeFromBinary(msg[5:])
 	value, _ := s.Codec().TextualFromNative(nil, native)
-	fmt.Printf("Here is the message %s\n", string(value))
 	return value
 }

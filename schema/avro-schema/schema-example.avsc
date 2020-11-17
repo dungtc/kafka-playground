@@ -11,7 +11,7 @@
       "type": "string"
     }
   ],
-  "name": "Video",
+  "name": "Video2",
   "namespace": "io.confluent.examples.clients.basicavro",
   "type": "record"
 }

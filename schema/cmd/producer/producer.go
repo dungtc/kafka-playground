@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"strconv"
 
@@ -12,12 +11,13 @@ import (
 	"github.com/dungtc/kafka-playground/simple"
 	"github.com/google/uuid"
 	"github.com/riferrei/srclient"
+	"github.com/sirupsen/logrus"
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
 )
 
 var (
 	brokerList               = kingpin.Flag("brokerList", "List of brokers").Default("localhost:9092").Strings()
-	topic                    = kingpin.Flag("topic", "Topic name").Default("youtube").String()
+	topic                    = kingpin.Flag("topic", "Topic name").Default("schema-1").String()
 	version                  = kingpin.Flag("version", "Kafka version").Default("2.5.0").String()
 	maxRetry                 = kingpin.Flag("maxRetry", "Retry limit").Default("5").Int()
 	partitions        *int32 = kingpin.Flag("partitions", "Partitions").Default("1").Int32()
@@ -32,16 +32,20 @@ type ComplexType struct {
 func main() {
 	kingpin.Parse()
 
-	// schema
+	// init schema client
 	schemaRegistryClient := schema.NewSchema("http://localhost:8081")
-	// schema, err := schemaRegistryClient.GetLastestSchemaVersion(*topic)
-	// if schema != nil || err != nil {
-	// 	schema = schemaRegistryClient.CreateSchemaFromFile(*topic, "schema-example.avsc", srclient.Avro, false)
-	// }
-	fmt.Println("voo")
-	schema, err := schemaRegistryClient.CreateSchemaFromFile(*topic, "schema-example.avsc", srclient.Avro.String(), false)
-	if err != nil {
-		panic(err)
+
+	// get latest schema
+	logrus.Info("Action get lastest schema version")
+	schema, err := schemaRegistryClient.GetLastestSchemaVersion(*topic)
+	if schema != nil || err != nil {
+		logrus.Info("Action create schema from file")
+
+		// create schema if not exist
+		schema, err = schemaRegistryClient.CreateSchemaFromFile(*topic, "avro-schema/schema-example.avsc", srclient.Avro.String(), false)
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	// init administration
@@ -50,10 +54,12 @@ func main() {
 		panic(err)
 	}
 
+	// create topic if not exist
 	if err := clusterAdmin.NewTopic(*topic, *partitions, *replicationFactor); err != nil {
 		panic(err)
 	}
 
+	// create new producer
 	producer, err := simple.NewProducer(*maxRetry, *brokerList...)
 	if err != nil {
 		panic(err)
@@ -64,12 +70,11 @@ func main() {
 		}
 	}()
 
+	// send message
 	for i := 0; i < 10; i++ {
 		data := domain.Video{VideoId: strconv.Itoa(i), CategoryID: uuid.New().String(), ETag: ""}
-		// data2 := ComplexType{ID: 1, Name: "Gopher"}
 
 		payload, _ := json.Marshal(data)
-
 		partition, offset, err := producer.SendMessage(&sarama.ProducerMessage{
 			Topic: *topic,
 			Key:   sarama.ByteEncoder([]byte(uuid.New().String())),
@@ -78,6 +83,6 @@ func main() {
 		if err != nil {
 			log.Panic(err)
 		}
-		log.Printf("Message is stored in topic(%s)/partition(%d)/offset(%d)\n", *topic, partition, offset)
+		logrus.Printf("Message is stored in topic(%s)/partition(%d)/offset(%d), schema %v\n", *topic, partition, offset, schema.ID())
 	}
 }
