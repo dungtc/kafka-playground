@@ -1,12 +1,10 @@
 package domain
 
-import "github.com/jinzhu/gorm"
-
 type Video struct {
-	gorm.Model
 	VideoId    string `json:"id" gorm:"column:video_id"`
 	CategoryID string `json:"categoryId" gorm:"column:category_id"`
 	ETag       string `json:"etag" gorm:"column:etag"`
+	Author     string `json:"author,omitempty" gorm:"column:author"`
 }
 
 func (v Video) TableName() string {

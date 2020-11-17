@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/Shopify/sarama"
+	"github.com/sirupsen/logrus"
 )
 
 type Consumer struct {
@@ -46,9 +47,10 @@ func (consumer *Consumer) ConsumeClaim(session sarama.ConsumerGroupSession, clai
 			return fmt.Errorf("Error getting the schema with id '%d' %s", schema.ID(), err)
 		}
 
+		// deserialize data
 		payload := schema.DeserializeData(message.Value)
 
-		log.Printf("Message claimed: value = %s, timestamp = %v, topic = %s, partition = %v", string(payload), message.Timestamp, message.Topic, message.Partition)
+		logrus.Printf("Message value = %s, schema_id = %d, timestamp = %v, topic = %s, partition = %v", string(payload), schema.ID(), message.Timestamp, message.Topic, message.Partition)
 		session.MarkMessage(message, "")
 	}
 

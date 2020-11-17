@@ -1,0 +1,14 @@
+version: '2'
+services:
+  kafka-develop:
+    image: landoop/fast-data-dev:2.5.0
+    ports:
+      - 2128:2128 # Zookeeper
+      - 3030:3030 # web server
+      - 8081-8083:8081-8083 # Schema registry, rest proxy, connect
+      - 9092:9092 # BROKER
+    environment:
+      ADV_HOST: 127.0.0.1
+      RUNTESTS: 0
+      FORWARDLOGS: 0
+      SAMPLEDATA: 0
