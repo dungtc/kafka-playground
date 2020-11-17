@@ -132,10 +132,12 @@ You should notice to these env variables, it defines internal network and extern
 
 # 4. Schema Registry
 
+Producer sends bytes to kafka cluster, the consumers don't know any data that the producer sends, it has no verification. In a distributed system it becomes very hard for evolving microservices between other teams. That why schema registry was created.
+
 ![alt text](https://github.com/dungtc/kafka-playground/blob/develop/schema/kafka-schema-registry.png?raw=true)
 
 
-**Schema registry** provides restful interface for storing and retriving Avro, JSON, Protobuf schema
+**Schema registry** provides restful interface for storing and retriving Avro, JSON, Protobuf schema between producer and consumer
 
 
 ### [Schema registry API usage](https://docs.confluent.io/current/schema-registry/develop/using.html)
