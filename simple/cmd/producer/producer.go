@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	brokerList               = kingpin.Flag("brokerList", "List of brokers").Default("localhost:9092").Strings()
+	brokerList               = kingpin.Flag("brokerList", "List of brokers").Default("0.0.0.0:9092").Strings()
 	topic                    = kingpin.Flag("topic", "Topic name").Default("youtube").String()
 	version                  = kingpin.Flag("version", "Kafka version").Default("2.5.0").String()
 	maxRetry                 = kingpin.Flag("maxRetry", "Retry limit").Default("5").Int()

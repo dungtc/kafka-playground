@@ -1,0 +1,29 @@
+[	
+	{
+		"type": "record",
+		"name": "CustomerAdress",
+		"namespace": "customer",
+		"fields": [
+			{"name": "address", "type": "string"},
+			{"name": "city", "type": "string"},
+			{"name": "postcode", "type": ["int", "string"]},
+			{"name": "type", "type": "enum", "symbols" :["PO BOX", "RESIDENTIAL", "ENTERPRISE"]},
+		]
+	},
+	{
+		"type": "record",
+		"name": "customer-schema",
+		"namespace": "customer",
+		"doc": "document for customer schema",
+		"alias": "cus-sc",
+		"fields": [
+			{"name": "first_name", "type": "string", "doc": "First name"},
+			{"name": "middle_name", "type": ["null", "string"], "default": null, "doc": "Middlename"},
+			{"name": "last_name", "type": "string", "doc": "Last name"},
+			{"name": "age", "type": "int", "doc": "Age"},
+			{"name": "automated_email", "type": "boolean", "default": true, "doc": "Automated email"},
+			{"name": "emails", "type": "array", "items":"string", "default": [], "doc": "Customer emails"},
+			{"name": "address", "type": "customer.CustomerAdress"}
+		]
+	}
+]

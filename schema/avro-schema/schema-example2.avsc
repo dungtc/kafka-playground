@@ -1,0 +1,21 @@
+{
+	"fields": [
+	  {
+		"name": "id",
+		"type": "string"
+	  },{
+		"name": "categoryId",
+		"type": "string"
+	  },{
+		"name": "etag",
+		"type": "string"
+	  },{
+		"name": "author",
+		"type": "string",
+		"default": "empty"
+	  }
+	],
+	"name": "Video3",
+	"namespace": "io.confluent.examples.clients.basicavro2",
+	"type": "record"
+  }
