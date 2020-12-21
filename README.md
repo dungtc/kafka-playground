@@ -1,3 +1,8 @@
+### Author
+- [Linkedin profile](https://www.linkedin.com/in/tran-dung-076221179/)
+Contact me if you have any questions or joining contributors
+
+
 # 1. Messaging with Simple Publish Subscribe (pub/sub)
 A publisher or multiple publisher write messages to many partitions and single or multiple consumer groups consume those messages.
 
@@ -115,7 +120,7 @@ curl -X GET "localhost:9200/_search?pretty&size=100" -H 'Content-Type: applicati
 When a kafka client connect to one of brokers, it will auto connect to entire kafka cluster brokers. Kafka broker call **bootstrap server**.
 
 **Zookeeper** responsible for managing kafka brokers, it perform partition leader election, and in-sync-replicas.
-More than that it notify to **Kafka** if any configuration change happen (such as topics, paritions...).
+Furtherly it informs to **Kafka** if any configurations change happen (such as topics, paritions...).
 
 ***In production environment, you need to config **Zookeeper Cluster** too***
 
@@ -132,7 +137,7 @@ You should notice to these env variables, it defines internal network and extern
 
 # 4. Schema Registry
 
-Producer sends bytes to kafka cluster, the consumers don't know any data that the producer sends, it has no verification and will break the consumer. In a distributed system it becomes very hard for evolving microservices and break consistency between other teams. That why schema registry was created.
+Producer sends bytes to kafka cluster, the consumers don't know any data that the producer sends, it has no verification and will break the consumer. In a distributed system it becomes very hard for evolving microservices and break consistency between other teams. That's why schema registry was created.
 
 ![alt text](https://github.com/dungtc/kafka-playground/blob/develop/schema/kafka-schema-registry.png?raw=true)
 
