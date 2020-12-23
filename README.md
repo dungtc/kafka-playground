@@ -232,14 +232,30 @@ Kafka Connect is used for streaming data between Kafka and other data system. It
 
 ![Connector architecture](./connector/kafka-connector.png)
 
-
 List of available connectors: https://www.confluent.io/hub
-
 Kafka connect with schema registry: https://docs.confluent.io/platform/current/schema-registry/connect.html
+
+### [Connect API Usage](https://docs.confluent.io/platform/current/connect/references/restapi.html)
+
+Create a new connector
+
+```
+curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json" -d @source/distributed/connector-json.json
+```
+
+Get connector information
+```
+curl -X GET http://localhost:8083/connectors/${connector-name}
+```
 
 ### Source connector
 
 The source connector gives you the way to import data from any data sets and write to kafka topic
+
+Create a new source connector
+```
+curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json" -d @source/distributed/connector-json.json
+```
 
 **Example JDBC source connector**
 ```JDBC source connector allow import any relational database with JDBC driver
@@ -258,3 +274,33 @@ value.converter=org.apache.kafka.connect.json.JsonConverter
 key.converter=org.apache.kafka.connect.json.JsonConverter
 ```
 
+### Sink connector
+
+The Kafka sink connector allows you to export data from Kafka to any data sets
+
+Create a new sink connector
+```
+curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json" -d @sink/distributed/elastic-json.json
+```
+
+**Example Elastic sink connector with json schema less**
+```Elastic sink connector no schema
+connector.class=io.confluent.connect.elasticsearch.ElasticsearchSinkConnector
+type.name=_doc
+errors.retry.timeout=-1
+topics=postgresql-source-connector-orders
+transforms=ExtractTimestamp
+key.ignore=true
+schema.ignore=true
+transforms.ExtractTimestamp.type=org.apache.kafka.connect.transforms.InsertField$Value
+value.converter.schemas.enable=false
+value.converter=org.apache.kafka.connect.json.JsonConverter
+connection.url=http://elasticsearch:9200
+key.converter=org.apache.kafka.connect.storage.StringConverter
+transforms.ExtractTimestamp.timestamp.field=timestamp
+```
+
+**Query Elastic data**
+```
+curl -X GET "localhost:9200/_search?pretty&size=100" -H 'Content-Type: application/json' -d'{"query":{"match_all":{}}}'
+```
