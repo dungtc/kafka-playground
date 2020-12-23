@@ -13,22 +13,24 @@ services:
       FORWARDLOGS: 0
       SAMPLEDATA: 0
 
-  # postgres:
-  #   image: postgres
-  #   container_name: postgres
-  #   ports:
-  #     - 5432:5432
-  #   environment:
-  #    - POSTGRES_PASSWORD=postgres
-  #    - PGDATA=/var/lib/postgresql/data/pgdata
-  #   volumes:
-  #    - ~/.data/postgresql:/var/lib/postgresql/data
+  postgres:
+    image: postgres
+    container_name: postgres
+    ports:
+      - 5432:5432
+    environment:
+     - POSTGRES_PASSWORD=postgres
+     - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+     - ~/.data/postgresql:/var/lib/postgresql/data
 
   migrate:
     image: migrate/migrate
     volumes:
       - ./migrations:/migrations
-    command: ["-path", "/migrations", "-database",  "jdbc:postgresql://postgres:5432/postgres?sslmode=disable", "up"]
+    command: ["-path", "/migrations", "-database",  "postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable", "up"]
+    depends_on:
+      - postgres
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
     container_name: elasticsearch
