@@ -1,0 +1,19 @@
+{
+	"name": "elastic-sink",
+	"config": {
+	  "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
+	  "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+	  "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+	  "value.converter.schemas.enable": "false",
+	  "errors.retry.timeout": "-1",
+	  "topics": "postgresql-source-connector-orders",
+	  "connection.url": "http://elasticsearch:9200",
+	  "type.name": "_doc",
+	  "key.ignore": "true",
+	  "schema.ignore": "true",
+	  "transforms": "ExtractTimestamp",
+	  "transforms.ExtractTimestamp.type": "org.apache.kafka.connect.transforms.InsertField$Value",
+	  "transforms.ExtractTimestamp.timestamp.field": "timestamp"
+	}
+  }
+  

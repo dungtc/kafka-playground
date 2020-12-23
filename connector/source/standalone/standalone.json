@@ -1,0 +1,22 @@
+{
+	"name": "standalone_jdbc_source_postgres_12",
+	"config": {
+		"connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
+		"connection.url": "jdbc:postgresql://postgres:5432/postgres",
+		"connection.user": "postgres",
+		"connection.password": "postgres",
+		"topic.prefix": "standalone-postgresql-source-connector-",
+		"table.whitelist": "orders",
+		"mode": "timestamp",
+		"incrementing.column.name":"id",
+		"timestamp.column.name": "updated_at",
+		"key.converter": "org.apache.kafka.connect.json.JsonConverter",
+		"value.converter": "org.apache.kafka.connect.json.JsonConverter",
+		"key.converter.schemas.enable": "false",
+		"value.converter.schemas.enable": "false",
+		"bootstrap.servers":"localhost:9092",
+		"offset.storage.file.filename": "standalone.offset",
+		"rest.port": "8083",
+		"offset.flush.interval.ms": "10000"
+	}
+}
