@@ -1,0 +1,18 @@
+{
+	"name": "jdbc_source_postgres_12_avro",
+	"config": {
+		"connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
+		"connection.url": "jdbc:postgresql://postgres:5432/postgres",
+		"connection.user": "postgres",
+		"connection.password": "postgres",
+		"topic.prefix": "avro-postgresql-source-connector-",
+		"table.whitelist": "orders",
+		"mode": "timestamp",
+		"incrementing.column.name":"id",
+		"timestamp.column.name": "updated_at",
+		"key.converter": "io.confluent.connect.avro.AvroConverter",
+		"value.converter": "io.confluent.connect.avro.AvroConverter",
+		"key.converter.schema.registry.url":"http://localhost:8081",
+		"value.converter.schema.registry.url":"http://localhost:8081"
+	}
+}
