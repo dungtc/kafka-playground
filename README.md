@@ -2,7 +2,6 @@
 - [Linkedin profile](https://www.linkedin.com/in/tran-dung-076221179/)
 Contact me if you have any questions or joining contributors
 
-
 # 1. Messaging with Simple Publish Subscribe (pub/sub)
 A publisher or multiple publisher write messages to many partitions and single or multiple consumer groups consume those messages.
 
@@ -225,3 +224,37 @@ Provides more meaning with existing primitive types
 
 ```
 {"type": "int", "logicalType": "decimal"}
+```
+
+# 5. [Connect](https://docs.confluent.io/platform/current/connect/index.html)
+
+Kafka Connect is used for streaming data between Kafka and other data system. It's simple, low latency, reliable and scalable. Kafka Connect can push large data sets in and out of Kafka. It becomes an integral component of ETL pipeline when combined with Kafka and streaming processing framework.
+
+![Connector architecture](./connector/kafka-connector.png)
+
+
+List of available connectors: https://www.confluent.io/hub
+
+Kafka connect with schema registry: https://docs.confluent.io/platform/current/schema-registry/connect.html
+
+### Source connector
+
+The source connector gives you the way to import data from any data sets and write to kafka topic
+
+**Example JDBC source connector**
+```JDBC source connector allow import any relational database with JDBC driver
+connector.class=io.confluent.connect.jdbc.JdbcSourceConnector
+timestamp.column.name=[column_name1]
+incrementing.column.name=[auto_increment_column]
+table.whitelist=orders
+mode=timestamp
+topic.prefix=postgresql-source-connector-
+connection.url=jdbc:postgresql://postgres:5432/postgres
+connection.user=postgres
+connection.password=password
+key.converter.schemas.enable=false
+value.converter.schemas.enable=false
+value.converter=org.apache.kafka.connect.json.JsonConverter
+key.converter=org.apache.kafka.connect.json.JsonConverter
+```
+
