@@ -12,16 +12,23 @@ services:
       RUNTESTS: 0
       FORWARDLOGS: 0
       SAMPLEDATA: 0
-  postgres:
-    image: postgres
-    container_name: postgres
-    ports:
-      - 5432:5432
-    environment:
-     - POSTGRES_PASSWORD=postgres
-     - PGDATA=/var/lib/postgresql/data/pgdata
+
+  # postgres:
+  #   image: postgres
+  #   container_name: postgres
+  #   ports:
+  #     - 5432:5432
+  #   environment:
+  #    - POSTGRES_PASSWORD=postgres
+  #    - PGDATA=/var/lib/postgresql/data/pgdata
+  #   volumes:
+  #    - ~/.data/postgresql:/var/lib/postgresql/data
+
+  migrate:
+    image: migrate/migrate
     volumes:
-     - ~/.data/postgresql:/var/lib/postgresql/data
+      - ./migrations:/migrations
+    command: ["-path", "/migrations", "-database",  "jdbc:postgresql://postgres:5432/postgres?sslmode=disable", "up"]
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
     container_name: elasticsearch
@@ -32,3 +39,7 @@ services:
       ES_JAVA_OPTS: "-Xms1g -Xmx1g"
       discovery.type: "single-node"
       node.store.allow_mmap: "false"
+networks: 
+  default: 
+    external: 
+      name: external-example
