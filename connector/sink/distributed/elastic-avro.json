@@ -1,0 +1,20 @@
+{
+	"name": "avro-elastic-sink",
+	"config": {
+		"connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
+		"key.converter": "org.apache.kafka.connect.storage.StringConverter",
+		"value.converter": "io.confluent.connect.avro.AvroConverter",
+		"key.converter.schema.registry.url": "http://localhost:8081",
+		"value.converter.schema.registry.url": "http://localhost:8081",
+		"value.converter.schemas.enable": "true",
+		"errors.retry.timeout": "-1",
+		"topics": "avro-postgresql-source-connector-orders",
+		"connection.url": "http://elasticsearch:9200",
+		"type.name": "_doc",
+		"key.ignore": "true",
+		"schema.ignore": "false",
+		"transforms": "ExtractTimestamp",
+		"transforms.ExtractTimestamp.type": "org.apache.kafka.connect.transforms.InsertField$Value",
+		"transforms.ExtractTimestamp.timestamp.field": "timestamp"
+	}
+}
