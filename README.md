@@ -248,6 +248,12 @@ Get connector information
 curl -X GET http://localhost:8083/connectors/${connector-name}
 ```
 
+There are 2 types of worker configuration: **standalone mode** and **distributed mode**
+
+**Standalone Mode** is a single process that run connectors and tasks. For development purposes only.
+
+**Distributed Mode** is multiple worker that run connectors and tasks, it's scalable and fault tolerant. If a worker dies, rebalance happen, tasks will be delivered to other workers. Use for **production**.
+
 ### Source connector
 
 The source connector gives you the way to import data from any data sets and write to kafka topic
