@@ -1,0 +1,22 @@
+{
+	"name": "sink_jdbc_source_postgres_12",
+	"config": {
+		"connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
+		"key.ignore": "true",
+		"key.converter": "org.apache.kafka.connect.storage.StringConverter",
+		"value.converter": "org.apache.kafka.connect.json.JsonConverter",
+		"value.converter.schemas.enable": "false",
+		"tasks.max": "1",
+		"topics": "avro-postgresql-source-connector-orders",
+		"connection.url": "jdbc:postgresql://postgres:5432/postgres",
+		"connection.user": "postgres",
+		"connection.password": "postgres",
+		"insert.mode": "upsert",
+		"table.name.format": "sink_${topic}",
+		"pk.mode":"record_value",
+		"pk.fields": "id",
+		"fields.whitelist": "id,item_id,quantity,created_at,updated_at,deleted_at",
+		"auto.create": true,
+		"auto.evolve": true
+	}
+}
