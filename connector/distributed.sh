@@ -13,8 +13,14 @@ curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json
 
 # Sink connector
 
-# json schema less
+## json schema less
 curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json" -d @sink/distributed/elastic-json.json
 
-# avro schema
+## avro schema
 curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json" -d @sink/distributed/elastic-avro.json
+
+## jdbc Sink connector
+curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json" -d @sink/distributed/postgres-avro.json
+
+## update connector configuration
+curl -X PUT http://localhost:8083/connectors/sink_jdbc_source_postgres_12/config -H "Content-Type: application/json" -d @sink/distributed/postgres-avro.json
