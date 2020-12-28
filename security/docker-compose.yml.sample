@@ -1,0 +1,60 @@
+version: '2'
+services:
+  kafka-cluster:
+    image: landoop/fast-data-dev:2.5.0
+    ports:
+      - 2128:2128 # Zookeeper
+      - 3030:3030 # web server
+      - 8081-8083:8081-8083 # Schema registry, rest proxy, connect
+      - 9092-9093:9092-9093 # BROKER
+    volumes:
+      - ./ssl:/ssl
+    environment:
+      ADV_HOST: 127.0.0.1
+      RUNTESTS: 0
+      FORWARDLOGS: 0
+      SAMPLEDATA: 0
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,SSL:SSL
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,SSL://0.0.0.0:9093
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-cluster:9092,SSL://kafka-cluster:9093
+      KAFKA_SSL_TRUSTSTORE_LOCATION: /ssl/keystore.truststore.jks
+      KAFKA_SSL_TRUSTSTORE_PASSWORD: 'my-password'
+      KAFKA_SSL_KEYSTORE_LOCATION: /ssl/keystore.jks
+      KAFKA_SSL_KEYSTORE_PASSWORD: 'my-password'
+      KAFKA_SSL_KEY_PASSWORD: 'my-password'
+      KAFKA_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM: ''
+      KAFKA_SSL_CLIENT_AUTH: 'required'
+
+  postgres:
+    image: postgres:12
+    container_name: postgres
+    ports:
+      - 5432:5432
+    environment:
+     - POSTGRES_PASSWORD=postgres
+     - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+     - ~/.data/postgresql:/var/lib/postgresql/data
+
+  migrate:
+    image: migrate/migrate
+    volumes:
+      - ./migrations:/migrations
+    command: ["-path", "/migrations", "-database",  "postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable", "up"]
+    depends_on:
+      - postgres
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
+    container_name: elasticsearch
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+      discovery.type: "single-node"
+      node.store.allow_mmap: "false"
+networks: 
+  default: 
+    external: 
+      name: external-example
