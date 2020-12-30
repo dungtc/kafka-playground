@@ -1,6 +1,4 @@
-FROM confluentinc/cp-enterprise-kafka:5.4.0
-
-MAINTAINER sven@confluent.io
+FROM confluentinc/cp-kafka:5.4.0
 
 # Make sure the log directory is world-writable
 RUN echo "===> Creating authorizer logs dir ..." \
