@@ -121,9 +121,9 @@ Define Super Users for kafka
 super.users=User:CN=localhost;User:CN=root
 ```
 
-[Kafa ACLs API usage](https://docs.confluent.io/platform/current/kafka/authorization.html#using-acls)
+#### [**Kafa ACLs API usage**](https://docs.confluent.io/platform/current/kafka/authorization.html#using-acls)
 
-Add new ACLs for principal Bob
+Add new ACLs
 ```
 kafka-acls --authorizer-properties zookeeper.connect=localhost:2181 \ 
 --add --allow-principal User:Bob \ 
