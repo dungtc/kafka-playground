@@ -125,24 +125,23 @@ super.users=User:CN=localhost;User:CN=root
 
 Add new ACLs
 ```
-kafka-acls --authorizer-properties zookeeper.connect=localhost:2181 \ 
---add --allow-principal User:Bob \ 
---allow-host '*' \ 
---operation Read --operation Write \ 
---topic Test-topic
+kafka-acls --bootstrap-server localhost:9092 --command-config /tmp/admin.conf \ 
+ --add --allow-principal User:producer \ 
+ --allow-host '*' \ 
+ --operation Read --operation Write \ 
+ --topic test
 ```
 
 Remove ACLs
 ```
 kafka-acls --authorizer-properties zookeeper.connect=localhost:2181 \
-   --remove --allow-principal User:Bob \
-   --producer --topic Test-topic
+   --remove --allow-principal User:producer \
+   --producer --topic test
 ```  
 
 List ACLs
 ```
-kafka-acls --bootstrap-server localhost:9092 --command-config /tmp/admin.conf \
- --list --topic test-topic
+kafka-acls --bootstrap-server localhost:9092 --command-config /tmp/admin.conf --list --topic test
 ```
 
 ### Example SASL/SCRAM
