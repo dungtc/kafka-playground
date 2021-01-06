@@ -2,9 +2,15 @@ name: kafka-playground
 
 on:
   push:
-    branches: [ * ]
+    branches:
+      - master
+      - develop
+      - feature/**
   pull_request:
-    branches: [ * ]
+    branches:
+      - master
+      - develop
+      - feature/**
 
 jobs:
 
