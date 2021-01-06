@@ -1,5 +1,5 @@
 # Kafka playground
-![build pass](https://github.com/dungtc/kafka-playground/workflows/.github/workflows/go.yml/badge.svg)
+![build pass](https://github.com/dungtc/kafka-playground/workflows/.github/workflows/action.yml/badge.svg)
 
 ### Author
 - [Linkedin profile](https://www.linkedin.com/in/tran-dung-076221179/)
