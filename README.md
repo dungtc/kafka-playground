@@ -1,3 +1,6 @@
+# Kafka playground
+![build pass](https://github.com/dungtc/kafka-playground/workflows/.github/workflows/go.yml/badge.svg)
+
 ### Author
 - [Linkedin profile](https://www.linkedin.com/in/tran-dung-076221179/)
 Contact me if you have any questions or joining contributors
