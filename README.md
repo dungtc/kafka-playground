@@ -2,6 +2,10 @@
 - [Linkedin profile](https://www.linkedin.com/in/tran-dung-076221179/)
 Contact me if you have any questions or joining contributors
 
+### Contributing
+- Change repository code and make a commit. 
+- Create a pull request on your feature branch
+
 # 1. Messaging with Simple Publish Subscribe (pub/sub)
 A publisher or multiple publisher write messages to many partitions and single or multiple consumer groups consume those messages.
 
