@@ -1,3 +1,6 @@
+![Go Report Card](https://goreportcard.com/badge/github.com/dungtc/kafka-playground)
+[![License: MIT](https://img.shields.io/github/license/dungtc/kafka-playground)](https://opensource.org/licenses/Apache-2.0)
+
 ### Author
 - [Linkedin profile](https://www.linkedin.com/in/tran-dung-076221179/)
 Contact me if you have any questions or joining contributors
