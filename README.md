@@ -1,4 +1,4 @@
-![Go Report Card](https://goreportcard.com/badge/github.com/dungtc/kafka-playground)
+[![Go Report Card](https://goreportcard.com/badge/github.com/dungtc/kafka-playground)](https://goreportcard.com/report/github.com/dungtc/kafka-playground)
 [![License: MIT](https://img.shields.io/github/license/dungtc/kafka-playground)](https://opensource.org/licenses/Apache-2.0)
 
 ### Author
