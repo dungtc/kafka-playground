@@ -22,8 +22,8 @@ When a new consumer joins to consumer group or remove a consumer, **rebalancing*
 
 **Producer cmd**
 
-```
-go run ./cmd/producer/producer.go --topic topic-name --partitions 1 --replicas 1
+```console
+$ go run ./cmd/producer/producer.go --topic topic-name --partitions 1 --replicas 1
 ```
 
 **You have to config kafka cluster when change number paritions and replicas > 1**
@@ -32,21 +32,21 @@ go run ./cmd/producer/producer.go --topic topic-name --partitions 1 --replicas 1
 In case, you want to modify topic configuration ***manually*** after setting up kafka cluster, you can use kafka-cli to execute:
 
 Add new topic
-```
-docker-compose exec broker kafka-topics --create --topic youtube --partitions 3 -replication-factor 3 --bootstrap-server broker:9092
+```console
+$ docker-compose exec broker kafka-topics --create --topic youtube --partitions 3 -replication-factor 3 --bootstrap-server broker:9092
 ```
 
 Alter exist topic
-```
-docker-compose exec broker kafka-topics --alter --topic youtube --partitions 3 -replication-factor 3 --bootstrap-server broker:9092
+```console
+$ docker-compose exec broker kafka-topics --alter --topic youtube --partitions 3 -replication-factor 3 --bootstrap-server broker:9092
 ```
 
 Kafka doens't support reducing the number of paritions for a topic 
 
 **Consumer cmd**
 
-```
-go run ./cmd/consumer/consumer.go --topic topic-name
+```console
+$ go run ./cmd/consumer/consumer.go --topic topic-name
 ```
 
 # 2. Youtube streaming
@@ -58,19 +58,19 @@ A simple streaming model to collect videos data and sync data between **POSTGRES
 The kafka connect base image only contain a few connectors. To add new connector, you need to build a new docker image that have new connectors installed.
 
 ***Docker file***
-```
+```dockerfile
 FROM confluentinc/cp-kafka-connect-base:6.0.0
 RUN confluent-hub install --no-prompt confluentinc/kafka-connect-elasticsearch:10.0.1
 ```
 
 ***Build***
 
-```
-docker build . my-connect-image:1.0.0
+```console
+$ docker build . my-connect-image:1.0.0
 ```
 
 ***Prepare connector config***
-```
+```json
 {
   "name": "elastic-sink4",
   "config": {
@@ -92,14 +92,14 @@ docker build . my-connect-image:1.0.0
 ```
 
 ***Insert connector configuration***
-```
+```console
 ./run.sh
 ```
 Detail at https://docs.confluent.io/current/connect/managing/extending.html
 
 ***Create ksql stream***
 
-```
+```sql
 CREATE STREAM youtube (
     kind VARCHAR,
     etag VARCHAR,
@@ -112,8 +112,8 @@ CREATE STREAM youtube (
 ```
 
 ***Query elasticsearch***
-```
-curl -X GET "localhost:9200/_search?pretty&size=100" -H 'Content-Type: application/json' -d'
+```console
+$ curl -X GET "localhost:9200/_search?pretty&size=100" -H 'Content-Type: application/json' -d'
 {
     "query": {
         "match_all": {}
@@ -133,7 +133,7 @@ Furtherly it informs to **Kafka** if any configurations change happen (such as t
 ![alt text](https://github.com/dungtc/kafka-playground/blob/develop/kafka-cluster/Kafka-cluster.png?raw=true)
 
 **Environment**
-```
+```dockerfile
 KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
 KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
 KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker2:39092,PLAINTEXT_HOST://localhost:9093
@@ -154,8 +154,8 @@ Producer sends bytes to kafka cluster, the consumers don't know any data that th
 ### [Schema registry API usage](https://docs.confluent.io/current/schema-registry/develop/using.html)
 
 List all subjects
-```
-curl -X GET http://localhost:8081/subjects
+```console
+$ curl -X GET http://localhost:8081/subjects
 ```
 Example result:
 ```
@@ -163,19 +163,19 @@ Example result:
 ```
 
 Get schema registered version of subject
-```
-curl -X GET http://localhost:8081/subjects/${subject-name}/versions/1
+```console
+$ curl -X GET http://localhost:8081/subjects/${subject-name}/versions/1
 ```
 Delete schema version of subject
 
-```
-curl -X DELETE http://localhost:8081/subjects/${subject-name}/versions/1
+```console
+$ curl -X DELETE http://localhost:8081/subjects/${subject-name}/versions/1
 ```
 
 ### [Avro schema](https://avro.apache.org/docs/current/spec.html)
 
 Avro schema form includes 4 fields: type, namespace, name, fields
-``` Example
+```json
 {
      "type": "record",
      "namespace": "com.example",
@@ -190,7 +190,7 @@ Avro schema form includes 4 fields: type, namespace, name, fields
 **Complex Data Types** record, enum, array, map, unions, fixed (fixed-sized field)
 
 **"record"** represents an object 
-``` 
+```json
 {
      "type": "record",
      "namespace": "com.example",
@@ -203,22 +203,22 @@ Avro schema form includes 4 fields: type, namespace, name, fields
 
 **"enum"** defines enumerated values
 
-```
+```json
 {"type": "enum", "symbols": ["A", "B","C"]}
 ```
 
 **"array"** defines an array fields with a type
-```
+```json
 {"type": "array", "items": "string"}
 ```
 
 **"map"** defines key, value pairs. The key must be a string
-```
+```json
 {"type": "map", "values": "string"}
 ```
 
 **"unions"** define a list of variable types
-```
+```json
 {"type": ["int", "string", "null"]}
 ```
 
@@ -229,7 +229,7 @@ Provides more meaning with existing primitive types
 - time-milis (long) number of miliseconds after midnight
 - timestamp-milis (long) number of miliseconds from unix epoch
 
-```
+```json
 {"type": "int", "logicalType": "decimal"}
 ```
 
@@ -246,13 +246,13 @@ Kafka connect with schema registry: https://docs.confluent.io/platform/current/s
 
 Create a new connector
 
-```
-curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json" -d @source/distributed/connector-json.json
+```console
+$ curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json" -d @source/distributed/connector-json.json
 ```
 
 Get connector information
-```
-curl -X GET http://localhost:8083/connectors/${connector-name}
+```console
+$ curl -X GET http://localhost:8083/connectors/${connector-name}
 ```
 
 There are 2 types of worker configuration: **standalone mode** and **distributed mode**
@@ -266,12 +266,12 @@ There are 2 types of worker configuration: **standalone mode** and **distributed
 The source connector gives you the way to import data from any data sets and write to kafka topic
 
 Create a new source connector
-```
-curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json" -d @source/distributed/connector-json.json
+```console
+$ curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json" -d @source/distributed/connector-json.json
 ```
 
 **Example JDBC source connector**
-```JDBC source connector allow import any relational database with JDBC driver
+```yaml
 connector.class=io.confluent.connect.jdbc.JdbcSourceConnector
 timestamp.column.name=[column_name1]
 incrementing.column.name=[auto_increment_column]
@@ -292,12 +292,12 @@ key.converter=org.apache.kafka.connect.json.JsonConverter
 The Kafka sink connector allows you to export data from Kafka to any data sets
 
 Create a new sink connector
-```
-curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json" -d @sink/distributed/elastic-json.json
+```console
+$ curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json" -d @sink/distributed/elastic-json.json
 ```
 
 **Example Elastic sink connector with json schema less**
-```Elastic sink connector no schema
+```yaml
 connector.class=io.confluent.connect.elasticsearch.ElasticsearchSinkConnector
 type.name=_doc
 errors.retry.timeout=-1
@@ -314,6 +314,6 @@ transforms.ExtractTimestamp.timestamp.field=timestamp
 ```
 
 **Query Elastic data**
-```
-curl -X GET "localhost:9200/_search?pretty&size=100" -H 'Content-Type: application/json' -d'{"query":{"match_all":{}}}'
+```console
+$ curl -X GET "localhost:9200/_search?pretty&size=100" -H 'Content-Type: application/json' -d'{"query":{"match_all":{}}}'
 ```
