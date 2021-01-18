@@ -93,7 +93,7 @@ $ docker build . my-connect-image:1.0.0
 
 ***Insert connector configuration***
 ```console
-./run.sh
+$ ./run.sh
 ```
 Detail at https://docs.confluent.io/current/connect/managing/extending.html
 
