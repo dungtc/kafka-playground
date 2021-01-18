@@ -9,14 +9,14 @@ Contact me if you have any questions or joining contributors
 - Change repository code and make a commit. 
 - Create a pull request on your feature branch
 
-# 1. Messaging with Simple Publish Subscribe (pub/sub)
-A publisher or multiple publisher write messages to many partitions and single or multiple consumer groups consume those messages.
+# 1. Messaging with Simple Publish-Subscribe (pub/sub)
+A publisher or multiple publishers write messages to many partitions and single or multiple consumer groups consume those messages.
 
-**Consumer group** is a group of consumers, it can parallelise the data consumption.
+**Consumer group** is a group of consumers, it can parallelize the data consumption.
 
-When a new consumer joins to consumer group or remove a consumer, **rebalancing** happen
+When a new consumer joins to consumer group or removes a consumer, **rebalancing** happen
 
-**Consumer group coordinator** implement rebalacing strategy and manage the state of the group. It auto rebalace message to appropriate consumer in each consumer group
+**Consumer group coordinator** implements the rebalancing strategy and manages the state of the group. It auto rebalance message to the appropriate consumer in each consumer group
 
 ![alt text](https://images.squarespace-cdn.com/content/v1/56894e581c1210fead06f878/1512813188413-EEI12VI1FMQLJ4XMRQTJ/ke17ZwdGBToddI8pDm48kJMyHperWZxre3bsQoFNoPhZw-zPPgdn4jUwVcJE1ZvWEtT5uBSRWt4vQZAgTJucoTqqXjS3CfNDSuuf31e0tVGDclntk9GVn4cF1XFdv7wlNvED_LyEM5kIdmOo2jMRZpu3E9Ef3XsXP1C_826c-iU/KafkaPubSub.png?format=500w)
 
@@ -26,10 +26,10 @@ When a new consumer joins to consumer group or remove a consumer, **rebalancing*
 $ go run ./cmd/producer/producer.go --topic topic-name --partitions 1 --replicas 1
 ```
 
-**You have to config kafka cluster when change number paritions and replicas > 1**
+**You have to config Kafka cluster when change number partitions and replicas > 1**
 
 
-In case, you want to modify topic configuration ***manually*** after setting up kafka cluster, you can use kafka-cli to execute:
+In case, you want to modify topic configuration ***manually*** after setting up Kafka cluster, you can use Kafka-CLI to execute:
 
 Add new topic
 ```console
@@ -41,7 +41,7 @@ Alter exist topic
 $ docker-compose exec broker kafka-topics --alter --topic youtube --partitions 3 -replication-factor 3 --bootstrap-server broker:9092
 ```
 
-Kafka doens't support reducing the number of paritions for a topic 
+Kafka doesn't support reducing the number of partitions for a topic 
 
 **Consumer cmd**
 
@@ -55,7 +55,7 @@ A simple streaming model to collect videos data and sync data between **POSTGRES
 ![alt text](https://github.com/dungtc/kafka-playground/blob/develop/youtube-stream/diagram/youtube.png?raw=true)
 
 **Prepare connector image**
-The kafka connect base image only contain a few connectors. To add new connector, you need to build a new docker image that have new connectors installed.
+The Kafka connect base image only contain a few connectors. To add a new connector, you need to build a new docker image that has new connectors installed.
 
 ***Docker file***
 ```dockerfile
@@ -97,7 +97,7 @@ $ docker build . my-connect-image:1.0.0
 ```
 Detail at https://docs.confluent.io/current/connect/managing/extending.html
 
-***Create ksql stream***
+***Create KSQL stream***
 
 ```sql
 CREATE STREAM youtube (
@@ -123,10 +123,10 @@ $ curl -X GET "localhost:9200/_search?pretty&size=100" -H 'Content-Type: applica
 ```
 # 3. Kafka cluster
 
-When a kafka client connect to one of brokers, it will auto connect to entire kafka cluster brokers. Kafka broker call **bootstrap server**.
+When a Kafka client connects to one of the brokers, it will auto-connect to entire Kafka cluster brokers. Kafka broker call **bootstrap server**.
 
-**Zookeeper** responsible for managing kafka brokers, it perform partition leader election, and in-sync-replicas.
-Furtherly it informs to **Kafka** if any configurations change happen (such as topics, paritions...).
+**Zookeeper** responsible for managing Kafka brokers, it performs partition leader election and in-sync-replicas.
+Furtherly it informs **Kafka** if any configurations change happen (such as topics, partitions...).
 
 ***In production environment, you need to config **Zookeeper Cluster** too***
 
@@ -143,12 +143,12 @@ You should notice to these env variables, it defines internal network and extern
 
 # 4. Schema Registry
 
-Producer sends bytes to kafka cluster, the consumers don't know any data that the producer sends, it has no verification and will break the consumer. In a distributed system it becomes very hard for evolving microservices and break consistency between other teams. That's why schema registry was created.
+Producers send bytes to the Kafka cluster, the consumers don't know any data that the producer sends, it has no verification and will break the consumer. In a distributed system it becomes very hard for evolving microservices and breaks consistency between other teams. That's why the schema registry was created.
 
 ![alt text](https://github.com/dungtc/kafka-playground/blob/develop/schema/kafka-schema-registry.png?raw=true)
 
 
-**Schema registry** provides restful interface for storing and retriving Avro, JSON, Protobuf schema between producer and consumer
+**Schema registry** provides a restful interface for storing and retrieving Avro, JSON, Protobuf schema between producer and consumer
 
 
 ### [Schema registry API usage](https://docs.confluent.io/current/schema-registry/develop/using.html)
@@ -166,7 +166,7 @@ Get schema registered version of subject
 ```console
 $ curl -X GET http://localhost:8081/subjects/${subject-name}/versions/1
 ```
-Delete schema version of subject
+Delete schema version of the subject
 
 ```console
 $ curl -X DELETE http://localhost:8081/subjects/${subject-name}/versions/1
@@ -226,8 +226,8 @@ Avro schema form includes 4 fields: type, namespace, name, fields
 Provides more meaning with existing primitive types
 - decimal (bytes)
 - date (int)
-- time-milis (long) number of miliseconds after midnight
-- timestamp-milis (long) number of miliseconds from unix epoch
+- time-millis (long) number of milliseconds after midnight
+- timestamp-millis (long) number of milliseconds from Unix epoch
 
 ```json
 {"type": "int", "logicalType": "decimal"}
@@ -235,12 +235,12 @@ Provides more meaning with existing primitive types
 
 # 5. [Connect](https://docs.confluent.io/platform/current/connect/index.html)
 
-Kafka Connect is used for streaming data between Kafka and other data system. It's simple, low latency, reliable and scalable. Kafka Connect can push large data sets in and out of Kafka. It becomes an integral component of ETL pipeline when combined with Kafka and streaming processing framework.
+Kafka Connect is used for streaming data between Kafka and other data systems. It's simple, low latency, reliable, and scalable. Kafka Connect can push large data sets in and out of Kafka. It becomes an integral component of an ETL pipeline when combined with Kafka and streaming processing framework.
 
 ![Connector architecture](./connector/kafka-connector.png)
 
 List of available connectors: https://www.confluent.io/hub
-Kafka connect with schema registry: https://docs.confluent.io/platform/current/schema-registry/connect.html
+Kafka Connect with schema registry: https://docs.confluent.io/platform/current/schema-registry/connect.html
 
 ### [Connect API Usage](https://docs.confluent.io/platform/current/connect/references/restapi.html)
 
@@ -257,13 +257,13 @@ $ curl -X GET http://localhost:8083/connectors/${connector-name}
 
 There are 2 types of worker configuration: **standalone mode** and **distributed mode**
 
-**Standalone Mode** is a single process that run connectors and tasks. For development purposes only.
+**Standalone Mode** is a single process that runs connectors and tasks. For development purposes only.
 
-**Distributed Mode** is multiple worker that run connectors and tasks, it's scalable and fault tolerant. If a worker dies, rebalance happen, tasks will be delivered to other workers. Use for **production**.
+**Distributed Mode** is multiple workers that run connectors and tasks, it's scalable and fault-tolerant. If a worker dies, rebalance happens, tasks will be delivered to other workers. Use for **production**.
 
 ### Source connector
 
-The source connector gives you the way to import data from any data sets and write to kafka topic
+The source connector gives you the way to import data from any data sets and write to Kafka topic
 
 Create a new source connector
 ```console
